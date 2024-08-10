@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Edit User</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <form method="POST">
+            {% csrf_token %}
+            <label for="name">Full Name:</label>
+            <input type="text" name="name" id="name" value="{{ user.name|default_if_none:'' }}">
+
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="{{ user.username|default_if_none:'' }}">
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="{{ user.email|default_if_none:'' }}">
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

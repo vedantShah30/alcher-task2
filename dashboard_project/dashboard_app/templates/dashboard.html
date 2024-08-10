@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <button class="toggle-btn">&#9776;</button>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Dashboard</h2>
+                <button class="toggle-btn">&#10005;</button>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item has-dropdown">
+                    <a href="#"><img src="{% static 'images/dashboards.png' %}" class="icon">Dashboard <img src="{% static 'images/upload.png' %}" class="arrow"></a>
+                    <ul class="dropdown">
+                        <li><a href="#"><p class="lielement">Commerce</p></a></li>
+                        <li><a href="#"><p class="lielement">Analytics</p></a></li>
+                        <li><a href="#"><p class="lielement">Crypto</p></a></li>
+                        <li><a href="#"><p class="lielement">Helpdesk</p></a></li>
+                        <li><a href="#"><p class="lielement">Monitoring</p></a></li>
+                        <li><a href="#"><p class="lielement">Fitness</p></a></li>
+                    </ul>
+                </li>
+                <li class="menu-item has-dropdown">
+                    <a href="#"><img src="{% static 'images/dashboards.png' %}" class="icon">Application <img src="{% static 'images/upload.png' %}" class="arrow"></a>
+                    <ul class="dropdown">
+                        <li><a href="#"><p class="lielement">Management tools</p></a></li>
+                        <li><a href="#"><p class="lielement">Tracking</p></a></li>
+                        <li><a href="#"><p class="lielement">Crypto</p></a></li>
+                        <li><a href="#"><p class="lielement">Integrations</p></a></li>
+                        <li><a href="#"><p class="lielement">Automations and workflow</p></a></li>
+                        <li><a href="#"><p class="lielement">Security and compliance</p></a></li>
+                    </ul>
+                </li>
+                <li class="menu-item has-dropdown">
+                    <a href="#"><img src="{% static 'images/dashboards.png' %}" class="icon">Elements <img src="{% static 'images/upload.png' %}" class="arrow"></a>
+                    <ul class="dropdown">
+                        <li><a href="#"><p class="lielement">Reports</p></a></li>
+                        <li><a href="#"><p class="lielement">Widgets</p></a></li>
+                        <li><a href="#"><p class="lielement">Charts</p></a></li>
+                        <li><a href="#"><p class="lielement">Forms</p></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Welcome</h1>
+                <img src="{% static 'images/user.png' %}" class="user"><br>
+                <h1>Vedwinner</h1><br>
+            </header>
+            <section class="content">
+                <h2>Active users</h2>
+                <p>Paragraph tag to blabber something about active users tag</p>
+                <div class="alert">Some Alert message for the dashboard owner</div>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <a href="{% url 'edit_user' user.id %}" class="edit-btn"><img src="{% static 'images/save.svg' %}" class="save"> Edit</a>
+                                <a href="{% url 'delete_user' user.id %}" class="delete-btn"><img src="{% static 'images/save.svg' %}" class="save"> Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="#" class="add-user-btn" id="openAddUserModal">+ Add User</a>
+            </section>
+        </main>
+        <div id="addUserModal" class="modal">
+            <div class="modal-content">
+                <h2> Add Member</h2>
+                <span class="close" id="closeModal">&times;</span>
+                <form id="addUserForm" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" name="name" id="name" placeholder="What is your title?">
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Username">
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Email">
+                    </div>
+        
+                    <div class="modal-buttons">
+                        <button type="button" id="cancelButton" class="cancel-button">Cancel</button>
+                        <button type="submit" id="confirmButton" class="confirm-button">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+    <script>
+        var modal = document.getElementById('addUserModal');
+        var btn = document.getElementById('openAddUserModal');
+        var closeBtn = document.getElementById('closeModal');
+        var cancelButton = document.getElementById('cancelButton');
+
+        // Open the modal when the "Add User" button is clicked
+        btn.onclick = function() {
+        modal.style.display = "block";
+        }
+
+        // Close the modal when the close button or cancel button is clicked
+        closeBtn.onclick = function() {
+         modal.style.display = "none";
+        }
+        cancelButton.onclick = function() {
+        modal.style.display = "none";
+        }
+
+        // Close the modal when the user clicks outside the modal content
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }   
+        }
+
+        // Handle form submission and close modal on confirm
+        document.getElementById('addUserForm').onsubmit = function(event) {
+            event.preventDefault();
+    
+            // Send the form data via AJAX to the server
+            fetch("{% url 'add_user' %}", {
+                method: 'POST',
+                body: new FormData(this),
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Reload the page to see the new user in the table
+                window.location.reload();
+            });
+
+            // Close the modal
+            modal.style.display = "none";
+        };
+    </script>
+    </body>
+</html>
